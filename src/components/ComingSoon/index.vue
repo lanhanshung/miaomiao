@@ -5,7 +5,11 @@
         <Loading v-if="isShowLoad"></Loading>
         <Scroller>
           <ul>
-            <li v-for="item in comingList" :key="item.id">
+            <li
+              v-for="item in comingList"
+              :key="item.id"
+              @tap="itemClick(item.id)"
+            >
               <div class="pic_show">
                 <img :src="item.img | setWH('100.100')" />
               </div>
@@ -56,7 +60,7 @@ export default {
     getComingList () {
       this.cityId = this.$store.state.city.id
       this.axios
-        .get('/api/movieComingList?cityId='+this.cityId)
+        .get('/api/movieComingList?cityId=' + this.cityId)
         .then(result => {
           // console.log(result)
           if (result.data.msg === 'ok') {
@@ -65,10 +69,17 @@ export default {
             this.isShowLoad = false
             this.preCityId = this.cityId
           }
-          console.log('getComingList');
-          
+          // console.log('getComingList');
         })
         .catch(err => {})
+    },
+    itemClick (id) {
+      this.$router.push({
+        path: '/detail',
+        query: {
+          id: id
+        }
+      })
     }
   }
 }
